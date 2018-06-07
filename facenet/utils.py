@@ -5,9 +5,18 @@ import os
 FLAGS = None
 
 
+def draw_op(image, face_locations):
+    for top, right, bottom, left in face_locations:
+        # Draw a box around the face
+        cv2.rectangle(image, (left, top), (right, bottom), (0, 0, 255), 2)
+
+        # Draw a label with a name below the face
+        cv2.rectangle(image, (left, bottom - 25), (right, bottom), (0, 0, 255), cv2.FILLED)
+        # rgb_frame = image[:, :, ::-1]
+    return image
+
 def image_resize(image, size):
-    img = cv2.imread(image)
-    img_resized = cv2.resize(img, size, interpolation=cv2.INTER_CUBIC)
+    img_resized = cv2.resize(image, size, interpolation=cv2.INTER_CUBIC)
     print('resize op done.')
     return img_resized
 

@@ -8,8 +8,8 @@ FLAGS = None
 
 def parser():
     args = argparse.ArgumentParser()
-    args.add_argument('--image_path', default='/home/enningxie/Documents/DataSets/face_images/4200.jpg')
-    args.add_argument('--save_path', default='/home/enningxie/Documents/DataSets/face_rec/detec_images/4200.jpg')
+    args.add_argument('--image_path', default='../data/4200.jpg')
+    args.add_argument('--save_path', default='../processed_data/4200_02.jpg')
     return args.parse_args()
 
 

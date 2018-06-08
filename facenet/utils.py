@@ -1,6 +1,7 @@
 import argparse
 import cv2
 import os
+import pickle
 
 FLAGS = None
 
@@ -15,11 +16,11 @@ def draw_op(image, face_locations):
         # rgb_frame = image[:, :, ::-1]
     return image
 
+
 def image_resize(image, size):
     img_resized = cv2.resize(image, size, interpolation=cv2.INTER_CUBIC)
     print('resize op done.')
     return img_resized
-
 
 
 # OpenCV follows BGR order, while matplotlib likely follows RGB order.
@@ -28,10 +29,12 @@ def convert_bgr_to_rgb(bgr_img):
     rgb_img = cv2.merge([r, g, b])  # switch it to rgb
     return rgb_img
 
+
 def convert_rgb_to_bgr(rgb_img):
     r, g, b = cv2.split(rgb_img)
     bgr_img = cv2.merge([b, g, r])
     return bgr_img
+
 
 def convert_video_to_images(video_path, images_path, frame_number_per=100):
     input_movie = cv2.VideoCapture(video_path)
@@ -61,6 +64,13 @@ def parser():
     args.add_argument('--images_path', default='/home/enningxie/Documents/DataSets/face_images/4200.jpg')
     args.add_argument('--to_path', default='/home/enningxie/Documents/DataSets/face_rec/resize_images/4200.jpg')
     return args.parse_args()
+
+
+def save_op(save_path, save_name, save_data):
+    file_path = os.path.join(save_path, save_name)
+    with open(file_path, 'wb') as f:
+        pickle.dump(save_data, f)
+    print('save op done.')
 
 
 if __name__ == '__main__':

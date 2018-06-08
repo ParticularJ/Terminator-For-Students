@@ -28,6 +28,10 @@ def convert_bgr_to_rgb(bgr_img):
     rgb_img = cv2.merge([r, g, b])  # switch it to rgb
     return rgb_img
 
+def convert_rgb_to_bgr(rgb_img):
+    r, g, b = cv2.split(rgb_img)
+    bgr_img = cv2.merge([b, g, r])
+    return bgr_img
 
 def convert_video_to_images(video_path, images_path, frame_number_per=100):
     input_movie = cv2.VideoCapture(video_path)

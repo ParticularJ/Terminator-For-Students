@@ -7,13 +7,16 @@ FLAGS = None
 
 
 def draw_op(image, face_locations):
-    for top, right, bottom, left in face_locations:
+    names = range(len(face_locations))
+    for (top, right, bottom, left), name in zip(face_locations, names):
         # Draw a box around the face
         cv2.rectangle(image, (left, top), (right, bottom), (0, 0, 255), 2)
 
         # Draw a label with a name below the face
         cv2.rectangle(image, (left, bottom - 25), (right, bottom), (0, 0, 255), cv2.FILLED)
         # rgb_frame = image[:, :, ::-1]
+        font = cv2.FONT_HERSHEY_DUPLEX
+        cv2.putText(image, str(name), (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
     return image
 
 

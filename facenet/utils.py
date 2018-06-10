@@ -17,6 +17,27 @@ def draw_op(image, face_locations):
         # rgb_frame = image[:, :, ::-1]
         font = cv2.FONT_HERSHEY_DUPLEX
         cv2.putText(image, str(name), (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
+        cv2.line(image, (723, 2308), (1260, 965), (0, 0, 255), 2)
+        cv2.line(image, (723, 2308), (1260, 965), (0, 0, 255), 2)
+        cv2.line(image, (723, 2308), (1260, 965), (0, 0, 255), 2)
+        cv2.line(image, (723, 2308), (1260, 965), (0, 0, 255), 2)
+        cv2.line(image, (723, 2308), (1260, 965), (0, 0, 255), 2)
+        cv2.line(image, (723, 2308), (1260, 965), (0, 0, 255), 2)
+        cv2.line(image, (723, 2308), (1260, 965), (0, 0, 255), 2)
+        cv2.line(image, (723, 2308), (1260, 965), (0, 0, 255), 2)
+        print('{0}: ({1}, {2}).'.format(name, (left+right)/2, (top+bottom)/2))
+    return image
+
+
+def draw_op_dict(image, face_locations_dict):
+    for key in face_locations_dict.keys():
+        for num, (top, right, bottom, left) in enumerate(face_locations_dict[key]):
+            cv2.rectangle(image, (left, top), (right, bottom), (0, 0, 255), 2)
+            # Draw a label with a name below the face
+            cv2.rectangle(image, (left, bottom - 25), (right, bottom), (0, 0, 255), cv2.FILLED)
+            # rgb_frame = image[:, :, ::-1]
+            font = cv2.FONT_HERSHEY_DUPLEX
+            cv2.putText(image, key + '_' + str(num), (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
     return image
 
 

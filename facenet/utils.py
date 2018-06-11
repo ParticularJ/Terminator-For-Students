@@ -31,14 +31,23 @@ def draw_op(image, face_locations):
 
 def draw_op_dict(image, face_locations_dict):
     for key in face_locations_dict.keys():
-        for num, (top, right, bottom, left) in enumerate(face_locations_dict[key]):
+        for key_ in face_locations_dict[key].keys():
+            top, right, bottom, left = face_locations_dict[key][key_]
             cv2.rectangle(image, (left, top), (right, bottom), (0, 0, 255), 2)
             # Draw a label with a name below the face
             cv2.rectangle(image, (left, bottom - 25), (right, bottom), (0, 0, 255), cv2.FILLED)
             # rgb_frame = image[:, :, ::-1]
             font = cv2.FONT_HERSHEY_DUPLEX
-            cv2.putText(image, key + '_' + str(num), (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
+            cv2.putText(image, key + '_' + key_, (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
     return image
+    #     for num, (top, right, bottom, left) in enumerate(face_locations_dict[key]):
+    #         cv2.rectangle(image, (left, top), (right, bottom), (0, 0, 255), 2)
+    #         # Draw a label with a name below the face
+    #         cv2.rectangle(image, (left, bottom - 25), (right, bottom), (0, 0, 255), cv2.FILLED)
+    #         # rgb_frame = image[:, :, ::-1]
+    #         font = cv2.FONT_HERSHEY_DUPLEX
+    #         cv2.putText(image, key + '_' + str(num), (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
+    # return image
 
 
 def image_resize(image, size):

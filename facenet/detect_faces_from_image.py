@@ -84,9 +84,9 @@ if __name__ == '__main__':
             #print('{0} has {1} faces.'.format(i, count))
     name_list = [i*100 for i in range(1, 133)]
     face_locations_list = find_faces_in_pic(image_path, save_path, name_list)
-    save_faces_to_disk(image_path, faces_path, face_locations_list, name_list)
-    # save_name = '10600.pkl'
-    # save_op(saved_path, save_name, face_locations_list[0])
+    # save_faces_to_disk(image_path, faces_path, face_locations_list, name_list)
+    save_name = 'all_locations.pkl'
+    save_op(saved_path, save_name, face_locations_list)
 
 
 

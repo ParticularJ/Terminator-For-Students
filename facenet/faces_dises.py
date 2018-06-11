@@ -2,6 +2,7 @@ import argparse
 import os
 from collections import defaultdict
 import face_recognition as fr
+import pickle
 FLAGS = None
 
 
@@ -24,7 +25,20 @@ if __name__ == '__main__':
             face_location = fr.face_locations(image_data, number_of_times_to_upsample=0, model='cnn')
             face_encoding = fr.face_encodings(image_data, known_face_locations=face_location)
             faces_encoding[sub_name] = face_encoding[0]
-    # print(len(list(faces_encoding.keys())))
+    print(len(list(faces_encoding.keys())))
+
+    # faces_encoding_values = list(faces_encoding.values())
+    # faces_encoding_keys = list(faces_encoding.keys())
+    #
+    # faces_encoding_new = []
+    #
+    # for key_encoding, value_encoding in zip(faces_encoding_keys, faces_encoding_values):
+    #     faces_encoding_new.append((key_encoding, value_encoding))
+    #
+    # with open('../pickle_path/faces_encoding.pkl', 'wb') as f:
+    #     pickle.dump(faces_encoding_new, f)
+
+
     sorted_names = sorted(list(faces_encoding.keys()))
     for i in range(len(sorted_names)):
         for j in range(i+1, len(sorted_names)):

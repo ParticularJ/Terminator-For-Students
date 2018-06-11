@@ -1,2 +1,4 @@
 .idea/
 __pycache__/
+pickle_path/
+facenet/__pycache__/

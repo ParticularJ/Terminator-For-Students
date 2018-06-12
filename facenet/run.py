@@ -20,21 +20,27 @@ def parser():
 
 def count_in_pic(images_rgb):
     face_locations_list = []
+    count = 0
     for image_rgb in images_rgb:
+        print('Locations in {0}.'.format(count))
         face_locations = fr.face_locations(image_rgb, number_of_times_to_upsample=0, model="cnn")
         face_locations_list.append(face_locations)
+        count += 1
     return face_locations_list
 
 
 def _images_rgb(images_path):
     images_list = os.listdir(images_path)
     images_rgb = []
+    count = 0
     for image in images_list:
+        print('rgb in {0}.'.format(count))
         image_path = os.path.join(images_path, image)
         image_data = cv2.imread(image_path)
         image_resized = image_resize(image_data, IMAGE_SIZE)
         image_rgb = convert_bgr_to_rgb(image_resized)
         images_rgb.append(image_rgb)
+        count += 1
     return images_list, images_rgb
 
 

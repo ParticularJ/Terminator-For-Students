@@ -6,6 +6,7 @@ import pickle
 from sklearn import neighbors
 from collections import defaultdict
 import cv2
+import numpy as np
 from utils import *
 
 FLAGS = None
@@ -39,16 +40,36 @@ def train(X, y, model_save_path=None, n_neighbors=None, knn_algo='ball_tree', ve
     return knn_clf
 
 
-def predict(face_data, model_path=None, distance_threshold=0.31):
+def predict(face_data, location, line_data, line_02_data, model_path=None, distance_threshold=0.6):
     with open(model_path, 'rb') as f:
         knn_clf = pickle.load(f)
+    top, right, bottom, left = location
+    x = (right + left) / 2
+    y = (top + bottom) / 2
+    distance_row = []
+    distance_col = []
+    for k, b in line_02_data:
+        dis = abs(k * x + b - y) / math.sqrt(1 + math.pow(k, 2))
+        distance_row.append(dis)
+    dis_row_num = np.asarray(distance_row)
+    group_num_row = np.argmin(dis_row_num)
 
+    for k, b in line_data:
+        dis = abs(k * x + b - y) / math.sqrt(1 + math.pow(k, 2))
+        distance_col.append(dis)
+    dis_col_num = np.asarray(distance_col)
+    group_num_col = np.argmin(dis_col_num)
+    location_name = str(group_num_row) + '_' + str(group_num_col)
     # Use the KNN model to find the best matches for the test face
     closest_distances = knn_clf.kneighbors([face_data], n_neighbors=1)
     if closest_distances[0][0][0] <= distance_threshold:
         face_name = knn_clf.predict([face_data])[0]
+        if face_name != location_name and closest_distances[0][0][0] > 0.31:
+            face_name = "unknown"
     else:
         face_name = "unknown"
+    # print('face_name: {0}'.format(face_name))
+    # print('location: {0}_{1}'.format(group_num_row, group_num_col))
 
     return face_name
 
@@ -65,12 +86,18 @@ if __name__ == '__main__':
     model_save_path = os.path.join(FLAGS.pickle_path, model_save_name)
     locations_name = 'all_locations.pkl'
     locations_path = os.path.join(FLAGS.pickle_path, locations_name)
+    line_path = os.path.join(FLAGS.pickle_path, 'line.pkl')
+    line_02_path = os.path.join(FLAGS.pickle_path, 'line_02.pkl')
 
     with open(locations_path, 'rb') as f:
         all_locations = pickle.load(f)
 
     with open(encoding_path, 'rb') as f:
         faces_encoding = pickle.load(f)
+    with open(line_02_path, 'rb') as f:
+        line_02_data = pickle.load(f)
+    with open(line_path, 'rb') as f:
+        line_data = pickle.load(f)
 
     for face_name, face_encoding in faces_encoding:
         X.append(face_encoding)
@@ -91,8 +118,8 @@ if __name__ == '__main__':
         image_resized = image_resize(image_data, IMAGE_SIZE)
         image_rgb = convert_bgr_to_rgb(image_resized)
         faces_data = face_recognition.face_encodings(image_rgb, known_face_locations=locations)
-        for face_data in faces_data:
-            face_name = predict(face_data, model_path=model_save_path)
+        for face_data, location in zip(faces_data, locations):
+            face_name = predict(face_data, location, line_data, line_02_data, model_path=model_save_path)
             stu_name.append(face_name)
         print(stu_name)
         stu_names.append(stu_name)

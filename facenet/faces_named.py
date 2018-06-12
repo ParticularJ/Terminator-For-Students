@@ -21,10 +21,6 @@ def parser():
 
 
 def train(X, y, model_save_path=None, n_neighbors=None, knn_algo='ball_tree', verbose=False):
-
-
-
-
     # Determine how many neighbors to use for weighting in the KNN classifier
     if n_neighbors is None:
         n_neighbors = int(round(math.sqrt(len(X))))

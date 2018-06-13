@@ -17,7 +17,7 @@ def parser():
     args = argparse.ArgumentParser()
     args.add_argument('--pickle_path', default='../pickle_path/')
     args.add_argument('--images_path', default='/home/enningxie/Documents/DataSets/face_images')
-    args.add_argument('--images_save_path', default='/home/enningxie/Documents/DataSets/face_rec/face_recognition')
+    args.add_argument('--images_save_path', default='/home/enningxie/Documents/DataSets/face_rec/face_recognition_03')
     return args.parse_args()
 
 
@@ -40,7 +40,7 @@ def train(X, y, model_save_path=None, n_neighbors=None, knn_algo='ball_tree', ve
     return knn_clf
 
 
-def predict(face_data, location, line_data, line_02_data, model_path=None, distance_threshold=0.6):
+def predict(face_data, location, line_data, line_02_data, model_path=None, distance_threshold=1.0):
     with open(model_path, 'rb') as f:
         knn_clf = pickle.load(f)
     top, right, bottom, left = location
@@ -62,12 +62,17 @@ def predict(face_data, location, line_data, line_02_data, model_path=None, dista
     location_name = str(group_num_row) + '_' + str(group_num_col)
     # Use the KNN model to find the best matches for the test face
     closest_distances = knn_clf.kneighbors([face_data], n_neighbors=1)
-    if closest_distances[0][0][0] <= distance_threshold:
-        face_name = knn_clf.predict([face_data])[0]
-        if face_name != location_name and closest_distances[0][0][0] > 0.31:
-            face_name = "unknown"
-    else:
+    face_name = knn_clf.predict([face_data])[0]
+    if face_name != location_name and closest_distances[0][0][0] > 0.31:
         face_name = "unknown"
+
+    ### version 1.0 ###
+    # if closest_distances[0][0][0] <= distance_threshold:
+    #     face_name = knn_clf.predict([face_data])[0]
+    #     if face_name != location_name and closest_distances[0][0][0] > 0.31:
+    #         face_name = "unknown"
+    # else:
+    #     face_name = "unknown"
     # print('face_name: {0}'.format(face_name))
     # print('location: {0}_{1}'.format(group_num_row, group_num_col))
 

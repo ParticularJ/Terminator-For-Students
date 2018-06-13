@@ -109,12 +109,17 @@ def _predict(face_data, location, line_data, line_02_data, model_path=None, dist
     location_name = str(group_num_row) + '_' + str(group_num_col)
     # Use the KNN model to find the best matches for the test face
     closest_distances = knn_clf.kneighbors([face_data], n_neighbors=1)
-    if closest_distances[0][0][0] <= distance_threshold:
-        face_name = knn_clf.predict([face_data])[0]
-        if face_name != location_name and closest_distances[0][0][0] > 0.31:
-            face_name = "unknown"
-    else:
+    # ### version 2.0 ###
+    face_name = knn_clf.predict([face_data])[0]
+    if face_name != location_name and closest_distances[0][0][0] > 0.31:
         face_name = "unknown"
+    # ### version 1.0 ###
+    # if closest_distances[0][0][0] <= distance_threshold:
+    #     face_name = knn_clf.predict([face_data])[0]
+    #     if face_name != location_name and closest_distances[0][0][0] > 0.31:
+    #         face_name = "unknown"
+    # else:
+    #     face_name = "unknown"
     # print('face_name: {0}'.format(face_name))
     # print('location: {0}_{1}'.format(group_num_row, group_num_col))
 
